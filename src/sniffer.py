@@ -2,20 +2,22 @@ from scapy.all import sniff, IP, TCP, UDP
 
 
 class PacketSniffer:
-    """Capture packet summaries and pass them to the analyzer."""
+    """Capture packet summaries and report detected alerts."""
 
     def __init__(
         self,
         analyzer,
+        logger,
         interface=None,
-        capture_filter="ip"
+        capture_filter="ip",
     ):
         self.analyzer = analyzer
+        self.logger = logger
         self.interface = interface
         self.capture_filter = capture_filter
 
     def process_packet(self, packet):
-        """Extract metadata without logging packet payloads."""
+        """Extract packet metadata and analyze it."""
 
         if IP not in packet:
             return
@@ -30,7 +32,6 @@ class PacketSniffer:
             protocol = "TCP"
             dst_port = int(packet[TCP].dport)
             tcp_flags = str(packet[TCP].flags)
-
         elif UDP in packet:
             protocol = "UDP"
             dst_port = int(packet[UDP].dport)
@@ -55,9 +56,10 @@ class PacketSniffer:
                 f"[ALERT] {alert['severity'].upper()} | "
                 f"{alert['type']} | {alert['message']}"
             )
+            self.logger.log_alert(alert)
 
     def start(self):
-        """Start capturing packets until interrupted."""
+        """Start live packet capture."""
 
         print("NetWatch packet monitoring started.")
         print("Press Ctrl+C to stop.")

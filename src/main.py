@@ -4,10 +4,11 @@ from pathlib import Path
 import yaml
 
 from src.analyzer import TrafficAnalyzer
+from src.logger import NetWatchLogger
 
 
-def run_demo(analyzer):
-    """Test NetWatch with simulated packet summaries."""
+def run_demo(analyzer, logger):
+    """Test detection rules using simulated packets."""
 
     print("NetWatch DEMO mode started.")
     print("Using simulated packets, not live network traffic.\n")
@@ -29,7 +30,6 @@ def run_demo(analyzer):
         },
     ]
 
-    # Simulate a possible port scan.
     for port in range(1000, 1010):
         packets.append({
             "src_ip": "192.0.2.20",
@@ -55,8 +55,10 @@ def run_demo(analyzer):
                 f"[ALERT] {alert['severity'].upper()} | "
                 f"{alert['type']} | {alert['message']}"
             )
+            logger.log_alert(alert)
 
     print("\nNetWatch demo completed.")
+    print("Alerts saved to the configured log file.")
 
 
 def main():
@@ -75,14 +77,20 @@ def main():
         config.get("rules_file", "rules/default_rules.json")
     )
 
+    logger = NetWatchLogger(
+        log_file=config.get("log_file", "logs/netwatch.log"),
+        level=config.get("log_level", "INFO"),
+    )
+
     if args.demo:
-        run_demo(analyzer)
+        run_demo(analyzer, logger)
         return
 
     from src.sniffer import PacketSniffer
 
     sniffer = PacketSniffer(
         analyzer=analyzer,
+        logger=logger,
         interface=config.get("interface"),
         capture_filter=config.get("capture_filter", "ip"),
     )
