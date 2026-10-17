@@ -1,0 +1,22 @@
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Log files
+*.log
+logs/*
+
+# Environment variables and secrets
+.env
+
+# Keep the logs directory in Git
+!logs/.gitkeep
