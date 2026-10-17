@@ -1,0 +1,6 @@
+{
+    "max_packet_size_bytes": 2000,
+    "watched_destination_ports": [23, 445, 3389],
+    "port_scan_window_seconds": 10,
+    "port_scan_unique_ports_threshold": 10
+}

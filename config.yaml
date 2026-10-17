@@ -1,0 +1,5 @@
+interface: null
+capture_filter: "ip"
+log_level: "INFO"
+log_file: "logs/netwatch.log"
+rules_file: "rules/default_rules.json"
