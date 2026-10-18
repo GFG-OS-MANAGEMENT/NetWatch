@@ -1,90 +1,164 @@
 # NetWatch
 
-**NetWatch** is a beginner-friendly, lightweight cybersecurity tool designed to monitor and analyze network traffic, identify unusual patterns, and alert users to potential security threats. 
+**NetWatch** is an open-source, student-friendly cybersecurity project focused on network traffic monitoring and basic rule-based anomaly detection.
 
-By combining foundational **Data Communication and Networking (DCN)** concepts with rule-based anomaly detection, NetWatch provides straightforward traffic insights without the complexity of enterprise-grade SIEM tools.
+Built around foundational Data Communication and Networking (DCN) concepts, NetWatch helps students explore packet metadata, identify traffic patterns that match configurable detection rules, and review generated security alerts.
 
----
+The project is designed as a collaborative learning platform where students can contribute to Python development, networking, cybersecurity research, testing, and documentation.
 
 ## Features
 
-* **Real-Time Packet Monitoring:** Capture and inspect live network packets.
-* **Rule-Based Anomaly Detection:** Flag suspicious activities such as unusual traffic spikes, repeated failed connection attempts, or unauthorized port scans.
-* **DCN-Focused Insights:** Learn and visualize core networking concepts (TCP/IP headers, packet flags, subnet behavior) in action.
-* **Customizable Security Rules:** Easily add or modify detection rules via a simple configuration file.
-* **Lightweight & Beginner-Friendly:** Built with clean, readable code and minimal dependencies to help students and aspiring security professionals learn network security fundamentals.
+- **Live Packet Monitoring:** Capture and inspect network packet metadata using Scapy.
+- **Rule-Based Detection:** Flag packets that exceed a configured size threshold, traffic to watched destination ports, and possible TCP SYN port scans.
+- **Demo Mode:** Run simulated packet scenarios without requiring live packet capture.
+- **Alert Logging:** Record detected alerts with timestamps, severity, source addresses, and descriptive messages.
+- **Automated Tests:** Test core detection logic using Python's `unittest` framework.
+- **Student Contributions:** Encourage collaborative development through issues, branches, and pull requests.
 
----
+> **Current project status:** NetWatch is an early-stage educational prototype. Detection rules are basic indicators, and alerts do not prove that malicious activity has occurred. Advanced detection capabilities and a graphical dashboard may be considered for future development.
+
+## Technology Stack
+
+- Python
+- Scapy
+- PyYAML
+- Git and GitHub
+- Npcap for live packet capture on Windows
+
+## Project Structure
+
+```text
+NetWatch/
+├── README.md
+├── CONTRIBUTING.md
+├── requirements.txt
+├── config.yaml
+├── .gitignore
+├── src/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── sniffer.py
+│   ├── analyzer.py
+│   └── logger.py
+├── tests/
+│   ├── __init__.py
+│   └── test_analyzer.py
+├── rules/
+│   └── default_rules.json
+└── logs/
+```
+
+The `venv/` directory is created locally during setup and should not be committed to Git.
 
 ## Getting Started
 
 ### Prerequisites
 
-* Python 3.8+
-* `pip` package manager
-* Administrator/Root privileges (required for raw socket packet capture on most operating systems)
+- Python 3
+- Git
+- A code editor such as Visual Studio Code
+- Npcap on Windows for live packet capture
 
-### Installation
+### 1. Clone the Repository
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/your-username/netwatch.git](https://github.com/your-username/netwatch.git)
-   cd netwatch
+```bash
+git clone https://github.com/GFG-OS-MANAGEMENT/NetWatch.git
+cd NetWatch
+```
 
-2. Install dependencies:
----Bash
-pip install -r requirements.txt
+### 2. Create a Virtual Environment
 
-3. Run NetWatch:
----Bash
-sudo pytho n3 src/main.py 
+On Windows PowerShell:
 
-4. Usage
-Bash
-python3 src/main.py --interface eth0 --rules rules/default_rules.json
+```powershell
+py -m venv venv
+```
+
+### 3. Install Dependencies
+
+```powershell
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+### 4. Run Demo Mode
+
+Demo mode uses simulated packet summaries and does not require live packet capture.
+
+```powershell
+.\venv\Scripts\python.exe -m src.main --demo
+```
+
+The demonstration exercises the watched-port, large-packet, and possible-port-scan detection rules.
+
+### 5. Run the Automated Tests
+
+```powershell
+.\venv\Scripts\python.exe -m unittest discover -s tests -v
+```
+
+The tests validate the implemented analyzer scenarios.
+
+### 6. Start Live Packet Monitoring
+
+After installing Npcap and completing any required Windows permissions setup, run:
+
+```powershell
+.\venv\Scripts\python.exe -m src.main
+```
+
+Press `Ctrl + C` to stop monitoring.
+
+Live packet capture can require administrator privileges depending on your system configuration. Only monitor devices and networks you own or are authorized to inspect.
+
+## Alert Logging
+
+NetWatch records generated alerts in:
+
+```text
+logs/netwatch.log
+```
+
+The log includes timestamps, alert severity, alert type, source address, destination port when applicable, and the alert description.
+
+Log files are generated locally and should not be committed to the repository.
 
 ## Contributing
-We welcome contributions from the community! Please read our [CONTRIBUTING.md](./Contributing.md) to learn how you cacn help in building NetWatch.
 
+NetWatch welcomes contributions from students and developers interested in Python, computer networks, cybersecurity, testing, and documentation.
 
-## CODE_OF_CONDUCT.md
+You can help by:
 
-```markdown
-# Contributor Covenant Code of Conduct
+- Fixing bugs and improving existing code.
+- Adding automated tests.
+- Improving detection rules and documenting their limitations.
+- Improving setup instructions and technical documentation.
+- Proposing future features through GitHub issues.
 
-## Our Pledge
+Before contributing, read the [Contribution Guidelines](CONTRIBUTING.md).
 
-We as members, contributors, and leaders pledge to 
-make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+## Roadmap
 
-We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
+Potential areas for future contributions include:
 
-## Our Standards
+- More robust detection rules and false-positive evaluation.
+- Improved configuration validation and error handling.
+- Additional automated tests.
+- Better alert filtering and reporting.
+- A graphical dashboard for reviewing network activity.
+- Cross-platform setup and testing improvements.
 
-Examples of behavior that contributes to a positive environment for our community include:
+These are proposed improvements, not currently completed features.
 
-* Demonstrating empathy and kindness toward other people
-* Being respectful of differing opinions, viewpoints, and experiences
-* Giving and gracefully accepting constructive feedback
-* Accepting responsibility and apologizing to those affected by our mistakes, learning from the experience
-* Focusing on what is best not just for us as individuals, but for the overall community
+## Responsible Use
 
-Examples of unacceptable behavior include:
+NetWatch is intended for cybersecurity education and authorized network monitoring.
 
-* The use of sexualized language or imagery, and sexual attention or advances of any kind
-* Trolling, insulting or derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or electronic address, without explicit permission
-* Other conduct which could reasonably be considered inappropriate in a professional setting
+Detection alerts are indicators for investigation, not proof of an attack. Do not use the project to monitor networks without permission, collect sensitive information unnecessarily, or perform unauthorized security activities.
 
-## Enforcement Responsibilities
+## License
 
-Community leaders are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate, threatening, offensive, or harmful.
+A license has not yet been specified. Licensing information will be added once the project maintainers select and commit an open-source license.
 
-## Scope
+## Acknowledgements
 
-This Code of Conduct applies within all community spaces, and also when an individual is officially representing the community in public spaces.
-  
-## Enforcement
-
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at [Insert Contact Email]. All complaints will be reviewed and investigated promptly and fairly.
+NetWatch is a collaborative learning initiative intended to help students strengthen their understanding of Python, computer networks, and cybersecurity through practical development.
